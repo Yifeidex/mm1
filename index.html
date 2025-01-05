@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./dist/index.css">
+  <script src="./dist/vue.js"></script>
+  <script src="./dist/index.js"></script>
+  <script src="./dist/echarts.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app" class="page_container" v-loading="loading">
+    <div class="header">
+      <div class="left">
+        <div class="name">GenPharmaChain</div>
+        <div class="menus">
+          <el-menu :default-active="activeIndex" class="menu_box" mode="horizontal">
+            <el-menu-item index="1">Targets</el-menu-item>
+            <el-menu-item index="2">Diseases</el-menu-item>
+            <el-menu-item index="3">Ligands</el-menu-item>
+            <el-submenu index="4">
+              <template slot="title">Tools</template>
+              <el-menu-item index="2-1"></el-menu-item>
+            </el-submenu>
+            <el-menu-item index="5">About</el-menu-item>
+            <el-menu-item index="6">Tutorials</el-menu-item>
+
+          </el-menu>
+        </div>
+      </div>
+      <div class="right">
+        <div class="search">
+          <input placeholder="search"></input>
+          <img src="./images/search_icon.png" alt="">
+        </div>
+        <img class="btn1" src="./images/btn1.png" />
+        <img class="btn2" src="./images/btn2.png" />
+      </div>
+    </div>
+    <div class="index_container">
+      <div class="index_left">
+        <div class="i_l_row1">
+          <div class="i_l_name">Refine by Category</div>
+          <img class="close" src="./images/close_icon.png" alt="">
+        </div>
+        <div class="i_l_row2">
+          <img class="btn3" src="./images/btn3.png" alt="">
+        </div>
+        <div class="i_l_row3">
+          <el-collapse v-for="(item,index) in leftList" :key="item.facet">
+            <el-collapse-item :title="item.facet" name="1">
+              <div class="tip">
+                <div class="desc">description</div>
+                <el-tooltip class="item" effect="light" :content="item.sourceExplanation" placement="right-end">
+                  <img src="./images/btn4.png" alt="">
+                </el-tooltip>
+              </div>
+              <el-table ref="multipleTable" :data="item.values" tooltip-effect="dark" style="width: 100%">
+                <el-table-column type="selection" width="55">
+                </el-table-column>
+                <el-table-column label="名称" width="160" prop="name">
+                </el-table-column>
+                <el-table-column prop="count" label="数值">
+                </el-table-column>
+              </el-table>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+
+      </div>
+      <div class="index_right">
+        <div class="list_box">
+          <div class="i_r_item" v-for="item in rightList" :key="item._tcrdid+item.name">
+            <div class="name_row">
+              <div class="i_r_i_name">{{item.idgTDL}}</div>
+              <div class="aname">{{item.name}}</div>
+            </div>
+
+            <div class="i_r_i_row">
+              <div class="col1">
+                <div class="c1_title">Gene Details</div>
+                <div class="c1_row">
+                  <div class="label">Gene Symbol:</div>
+                  <div class="value">{{item.gene}}</div>
+                </div>
+                <div class="c1_row">
+                  <div class="label">UniProt ID:</div>
+                  <div class="value">{{item.accession}}</div>
+                </div>
+                <div class="c1_row">
+                  <div class="label">IDG Family:</div>
+                  <div class="value">{{item.idgFamily}}</div>
+                </div>
+              </div>
+              <div class="col1">
+                <div class="c1_title">Knowledge Metrics</div>
+                <div class="c1_row">
+                  <div class="label">PPIs:</div>
+                  <div class="value">{{item.ppiCount&&item.ppiCount[0]&&item.ppiCount[0].value}}</div>
+                </div>
+                <div class="c1_row">
+                  <div class="label">PubMed Score:</div>
+                  <div class="value">
+                    {{item.jensenScore&&item.jensenScore[0]&&Number(item.jensenScore[0].value).toFixed(2)}}</div>
+                </div>
+                <div class="c1_row">
+                  <div class="label">PubTator Score:</div>
+                  <div class="value">
+                    {{item.pubTatorScore&&item.pubTatorScore[0]&&Number(item.pubTatorScore[0].value).toFixed(2)}}</div>
+                </div>
+                <div class="c1_row">
+                  <div class="label">Antibody Count:</div>
+                  <div class="value">
+                    {{item.antibodyCount&&item.antibodyCount[0]&&Number(item.antibodyCount[0].value).toFixed(2)}}</div>
+                </div>
+                <div class="c1_row">
+                  <div class="label">Log Novelty:</div>
+                  <div class="value">{{item.novelty?Math.log(item.novelty).toFixed(2):''}}</div>
+                </div>
+              </div>
+              <div class="col2">
+                <div class="c2_title">llumination Graph</div>
+                <div class="c2_row" :id="item._tcrdid+item.name"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page_box">
+          <el-pagination size="small" @current-change="handleCurrentChange" background layout="prev, pager, next"
+            :current-page="pageInfo.pageNum" :total="pageInfo.total" :pageSize="pageInfo.size">
+          </el-pagination>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="./js/base.js"></script>
+  <script src="./js/index.js"></script>
+
+</body>
+
+</html>
