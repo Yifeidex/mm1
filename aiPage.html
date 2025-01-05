@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/index_v2.css">
+  <link rel="stylesheet" href="./dist/index.css">
+  <script src="./dist/vue.js"></script>
+  <script src="./dist/index.js"></script>
+  <script src="./dist/echarts.min.js"></script>
+  <title>Genpharmachain</title>
+</head>
+
+<body>
+  <div id="app" class="page_container" v-loading="loading">
+    <div class="left">
+      <div class="base_box">
+        <div class="row_top">
+          <div class="row_title">Genpharmachain</div>
+          <img class="search_btn" src="./images/search_icon2.png" alt="">
+        </div>
+        <div class="menu_box">
+          <el-menu default-active="4" class="el-menu-vertical" :default-openeds="['4']">
+            <el-menu-item index="1" @click="goPage('Homepage')">
+              <i class="el-icon-price-tag" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Homepage</span>
+            </el-menu-item>
+            <el-menu-item index="3" @click="goPage('Target')">
+              <i class="el-icon-star-off" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Target</span>
+            </el-menu-item>
+            <el-menu-item index="2">
+              <i class="el-icon-pie-chart" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Structure Search</span>
+            </el-menu-item>
+            <el-menu-item index="4" @click="goPage('aiPage')">
+              <i class="el-icon-paperclip" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">AI Drug development tools</span>
+            </el-menu-item>
+            <el-menu-item index="5" @click="goPage('uploadTarget')">
+              <i class="el-icon-message" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Upload Target</span>
+            </el-menu-item>
+            <el-menu-item index="6">
+              <i class="el-icon-message" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Using case</span>
+            </el-menu-item>
+
+          </el-menu>
+        </div>
+      </div>
+      <div class="base_box2">
+        <div class="row_top">
+          <div class="rt_name1">About Genpharmachain</div>
+          <div class="rt_name2">Resources</div>
+          <img class="btn2" src="./images/fxb_icon.png" alt="">
+        </div>
+        <div class="row_box">
+          <div class="row_item">
+            <img src="./images/edit_icon.png" alt="">
+            <div class="ri_label">
+              <div class="label1">Partner list</div>
+              <div class="label2">Academic｜manufacture</div>
+            </div>
+          </div>
+          <div class="row_item">
+            <img src="./images/support_icon.png" alt="">
+            <div class="ri_label">
+              <div class="label1">Support</div>
+              <div class="label2">contact us for support</div>
+            </div>
+          </div>
+          <div class="row_item">
+            <img src="./images/doc_icon.png" alt="">
+            <div class="ri_label">
+              <div class="label1">Doc</div>
+              <div class="label2">About Genpharmachain</div>
+            </div>
+          </div>
+          <div class="link_row">
+            <img class="link_icon" src="./images/link1.png" alt="">
+            <img class="link_icon" src="./images/link2.png" alt="">
+            <img class="link_icon" src="./images/link3.png" alt="">
+            <img class="link_icon" src="./images/link4.png" alt="">
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="center">
+      <iframe style="height: 100%;width: 100%;border:0" src="https://vidraft-eum.static.hf.space/index.html" aria-label="Static space app" class="space-iframe flex-grow bg-white p-0 outline-none" allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; clipboard-read; clipboard-write; display-capture; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-downloads allow-forms allow-modals allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-storage-access-by-user-activation" id="iFrameResizer0" scrolling="yes" style="overflow: auto;"></iframe>
+    </div>
+    <div class="right">
+      <div class="r_row1">
+        <div class="rr1_left">
+          <img class="header_img" src="./images/header_img.png" alt="">
+          <div class="user_info">
+            <div class="name">Becca Kirby</div>
+            <div class="address">Chicago USA</div>
+          </div>
+        </div>
+        <div class="rr1_right">
+          <img class="img_btn" src="./images/setting_icon.png" alt="">
+          <img class="img_btn" src="./images/message_icon.png" alt="">
+        </div>
+      </div>
+      <div class="r_row2">
+        <div class="r2_item">
+          <img src="./images/analysis_img.png" alt="">
+          <div class="r2_r">
+            <div class="value">27</div>
+            <div class="label">Analysis in progress</div>
+          </div>
+        </div>
+        <div class="r2_item">
+          <img src="./images/active_img.png" alt="">
+          <div class="r2_r">
+            <div class="value">31</div>
+            <div class="label">Active treatments</div>
+          </div>
+        </div>
+        <div class="r2_item">
+          <img src="./images/analysis_img.png" alt="">
+          <div class="r2_r">
+            <div class="value">27</div>
+            <div class="label">Analysis in progress</div>
+          </div>
+        </div>
+        <div class="r2_item">
+          <img src="./images/analysis_img.png" alt="">
+          <div class="r2_r">
+            <div class="value">27</div>
+            <div class="label">Analysis in progress</div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="r_row3">
+        <div class="r3_name1">Project invested</div>
+        <div class="r3_name2">TOKEN Price Change</div>
+        <div class="r3_name3">Bitcoin</div>
+        <img class="line_img" src="./images/v13.png" alt="">
+        <img class="point_img" src="./images/f52.png" />
+        <div class="label">Peak</div>
+        <div class="value">10<span class="unit">u/btc</span></div>
+      </div>
+      <div class="r_row4">
+        <div class="r4_row_name">
+          <div class="name">Recent update</div>
+          <div class="date">September11-17,2025</div>
+        </div>
+        <div class="r4_row_box">
+          <div class="col">
+            <div class="label">sun</div>
+            <img class="r4_line" src="./images/v14.png" alt="">
+          </div>
+          <div class="col">
+            <div class="label  act">sun</div>
+            <img class="r4_line" src="./images/v18.png" alt="">
+          </div>
+          <div class="col">
+            <div class="label">tue</div>
+            <img class="r4_line" src="./images/v14.png" alt="">
+          </div>
+          <div class="col">
+            <div class="label">web</div>
+            <img class="r4_line" src="./images/v14.png" alt="">
+          </div>
+        </div>
+        <img class="r4_info1" src="./images/info1.png" alt="">
+        <img class="r4_info2" src="./images/info2.png" alt="">
+        <img class="r4_info3" src="./images/info3.png" alt="">
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/base.js"></script>
+  <script src="./js/aiPage.js"></script>
+
+</body>
+
+</html>

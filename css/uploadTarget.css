@@ -1,0 +1,49 @@
+.center{
+  position: relative;
+}
+.center .c_name{
+  font-size: 0.36rem;
+  font-weight: bold;
+  color: #000;
+  margin-left: 0.45rem;
+  margin-top: 0.45rem;
+}
+
+.center .text1{
+  width: 96%;
+  margin-left: 2%;
+  margin-top: 0.4rem;
+
+}
+
+.center .text1 .el-textarea__inner{
+  font-size: 0.25rem;
+  font-weight: bold;
+  color: #000;
+  border: 0;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 2px 0 #aaa;
+}
+.center .text1 .el-textarea__inner::placeholder{
+  font-size: 0.32rem;
+  font-weight: bold;
+  color: #000;
+  font-style: italic;
+}
+
+.center .submit_btn{
+  height: 0.5rem;
+  width: 2.18rem;
+  background: #9787E9;
+  border-radius: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.24rem;
+  font-weight: bold;
+  color: #fff;
+  position: absolute;
+  right: 2%;
+  bottom: 4%;
+  cursor: pointer;
+}

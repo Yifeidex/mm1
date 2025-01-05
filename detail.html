@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/index_v2.css">
+  <link rel="stylesheet" href="./dist/index.css">
+  <link rel="stylesheet" href="./css/detail.css">
+  <script src="./dist/vue.js"></script>
+  <script src="./dist/index.js"></script>
+  <script src="./dist/echarts.min.js"></script>
+  <script src="./dist/d3.v4.min.js"></script>
+  <script type="module" src="./protvista-uniprot.mjs"></script>
+  <title>Genpharmachain</title>
+</head>
+
+<body>
+  <div id="app" class="page_container" v-loading="loading||loading1||loading2">
+    <div class="left">
+      <div class="base_box">
+        <div class="row_top">
+          <div class="row_title">Genpharmachain</div>
+          <img class="search_btn" src="./images/search_icon2.png" alt="">
+        </div>
+        <div class="menu_box">
+          <el-menu default-active="3" class="el-menu-vertical" :default-openeds="['4']">
+            <el-menu-item index="1" @click="goPage('Homepage')">
+              <i class="el-icon-price-tag" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Homepage</span>
+            </el-menu-item>
+            <el-menu-item index="3" @click="goPage('Target')">
+              <i class="el-icon-star-off" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Target</span>
+            </el-menu-item>
+            <el-menu-item index="2">
+              <i class="el-icon-pie-chart" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Structure Search</span>
+            </el-menu-item>
+            <el-menu-item index="4" @click="goPage('aiPage')">
+              <i class="el-icon-paperclip" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">AI Drug development tools</span>
+            </el-menu-item>
+            <el-menu-item index="5" @click="goPage('uploadTarget')">
+              <i class="el-icon-message" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Upload Target</span>
+            </el-menu-item>
+            <el-menu-item index="6">
+              <i class="el-icon-message" style="font-size: 0.24rem;font-weight: bold;"></i>
+              <span slot="title">Using case</span>
+            </el-menu-item>
+
+          </el-menu>
+        </div>
+      </div>
+      <div class="base_box2">
+        <div class="row_top">
+          <div class="rt_name1">About Genpharmachain</div>
+          <div class="rt_name2">Resources</div>
+          <img class="btn2" src="./images/fxb_icon.png" alt="">
+        </div>
+        <div class="row_box">
+          <div class="row_item">
+            <img src="./images/edit_icon.png" alt="">
+            <div class="ri_label">
+              <div class="label1">Partner list</div>
+              <div class="label2">Academic｜manufacture</div>
+            </div>
+          </div>
+          <div class="row_item">
+            <img src="./images/support_icon.png" alt="">
+            <div class="ri_label">
+              <div class="label1">Support</div>
+              <div class="label2">contact us for support</div>
+            </div>
+          </div>
+          <div class="row_item">
+            <img src="./images/doc_icon.png" alt="">
+            <div class="ri_label">
+              <div class="label1">Doc</div>
+              <div class="label2">About Genpharmachain</div>
+            </div>
+          </div>
+          <div class="link_row">
+            <img class="link_icon" src="./images/link1.png" alt="">
+            <img class="link_icon" src="./images/link2.png" alt="">
+            <img class="link_icon" src="./images/link3.png" alt="">
+            <img class="link_icon" src="./images/link4.png" alt="">
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="detail_container">
+      <img class="back_btn" @click="goBack" src="./images/back_btn.png" alt="">
+      <div class="detail_row1">
+        <div class="dr1_left">
+          <div class="chart" id="achart_1"></div>
+        </div>
+        <div class="dr1_right">
+          <div class="dr1r_1">
+            <div class="title_row">
+              <div class="title">Description</div>
+            </div>
+            <div class="text_row">{{description}}</div>
+          </div>
+          <div class="dr1r_2">
+            <div class="dr2_l">
+              <div class="title_row">
+                <div class="title">Gene Details</div>
+              </div>
+              <div class="dr2l_content">
+                <div class="row">
+                  <div class="label">Gene Name</div>
+                  <div class="value">{{paramData.gene}}</div>
+                </div>
+                <div class="row">
+                  <div class="label">UniProt ID:</div>
+                  <div class="value">{{paramData.accession}}</div>
+                </div>
+                <div class="row">
+                  <div class="label">Gene Symbol:</div>
+                  <div class="value" style="flex-direction: column;">
+                    <div v-for="item in symbols" :key="item.value">{{item.value}}</div>
+                  </div>
+                </div>
+                <div class="row" style="align-items: flex-start;">
+                  <div class="label" style="align-items: flex-start;">Ensembl ID</div>
+                  <div class="value" style="flex-direction: column;">
+                    <div v-for="item in ensembls" :key="item.id">{{item.id}}</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="dr2_r">
+              <div class="title_row">
+                <div class="title">Knowledge Table</div>
+              </div>
+              <div class="dr2r_content">
+                <el-table ref="multipleTable" style="width: 92%;" :max-height="280" :data="knowledgeTable" tooltip-effect="dark">
+                  <el-table-column prop="name" label="Most Knowledge About" width="240">
+                  </el-table-column>
+                  <el-table-column prop="value" label="Knowledge Value (0 to 1 scale)">
+                    <template slot-scope="scope">{{ Number(scope.row.value).toFixed(2) }}</template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail_row2">
+        <div class="dr2_l">
+          <div class="row_title">
+            <div class="title">Protein Classes</div>
+          </div>
+          <div class="row_content">
+            <div class="row">
+              <img class="rl_img" src="./images/icon001.png" alt="">
+              <div class="tab_title">PANTHER Classes > </div>
+              <div class="tab">{{pantherClasses?pantherClasses:'No PANTHER Classes found'}}
+              </div>
+            </div>
+            <div class="row">
+              <img class="rl_img" src="./images/icon001.png" alt="">
+              <div class="tab_title">DTO Classes> </div>
+              <div class="tab">{{dtos?dtos:'No DTO Classes found'}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dr2_r">
+          <div class="row">
+            <div class="label">PANTHER Classes:</div>
+            <div class="value">Classes for this protein according to Protein ANalysis THrough Evolutionary Relationships
+              (PANTHER) Classification System.</div>
+          </div>
+          <div class="row">
+            <div class="label">DTO Classes:</div>
+            <div class="value" style="align-items: center;">Classes for this protein according to by Drug Target
+              Ontology (DTO).</div>
+          </div>
+        </div>
+      </div>
+      <div class="detail_row3">
+        <div class="dr3_l">
+          <div class="dr3_box1">
+            <div class="opts">
+              <el-select v-model="value" no-data-text="No Data" placeholder="Coexpressed Target">
+                <el-option v-for="item in targetOptions" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+              <el-select v-model="value" no-data-text="No Data" placeholder="Data Source">
+                <el-option v-for="item in dataSourceOptions" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+              <el-select v-model="value" no-data-text="No Data" placeholder="Tissue">
+                <el-option v-for="item in tissueOptions" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </div>
+            <el-table ref="multipleTable" style="width: 92%;"  :max-height="300" :data="tableData1" tooltip-effect="dark">
+              <el-table-column prop="CoexpressedTarget" label="Coexpressed Target" width="300">
+              </el-table-column>
+              <el-table-column prop="DataSource" label="Data Source" width="230">
+              </el-table-column>
+              <el-table-column prop="Tissue" label="Tissue">
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="dr3_box1" style="margin-top: 0.6rem;">
+            <div class="opts">
+              <el-select v-model="value" no-data-text="No Data" placeholder="Coexpressed Target">
+                <el-option v-for="item in targetOptions" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+              <el-select v-model="value" no-data-text="No Data" placeholder="Data Source">
+                <el-option v-for="item in dataSourceOptions" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+              <el-select v-model="value" no-data-text="No Data" placeholder="Cancer Type">
+                <el-option v-for="item in cancerTypeOptions" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </div>
+            <el-table ref="multipleTable" style="width: 92%;" :max-height="300" :data="tableData2" tooltip-effect="dark">
+              <el-table-column prop="CoexpressedTarget" label="Coexpressed Target" width="300">
+              </el-table-column>
+              <el-table-column prop="DataSource" label="Data Source" width="230">
+              </el-table-column>
+              <el-table-column prop="CancerType" label="Cancer Type">
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="dr3_box2">
+            <div class="db2_title">Circle Plot (2)</div>
+            <div class="db2_chart">
+              <div class="achart1" id="achart2"></div>
+              <div class="achart2" id="achart3"></div>
+            </div>
+          </div>
+          <div class="dr3_box3">
+            <div class="db2_title">Anatomogram</div>
+            <div class="db2_chart">
+              <img src="./images/img_body.png" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="dr3_r" id="achart4"></div>
+      </div>
+      <div class="detail_row4">
+        <div class="dr4_left">
+          <div class="r4_opt">
+            <div class="btn">Full Sequence</div>
+          </div>
+          <div class="r4_list">
+            <div class="r4_item" v-for="(item,index) in sequence" :key="item.value+index">
+              <div class="label">{{item.order}}</div>
+              <div class="label">{{item.value}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail_row5">
+        <div class="r5_btn">Protein Sequence and Structure</div>
+        <div class="r5_name">ProtVista Viewer</div>
+        <protvista-uniprot style="width: 100%;height:calc(100% - 1.3rem);margin-top: 0.25rem;" :accession="paramData.accession"
+          dynamicsource="prod">
+        </protvista-uniprot>
+      </div>
+      <div class="detail_row6">
+        <div class="dr6_name">Viral Interactions</div>
+        <div class="dr6_list">
+          <el-collapse v-model="activeNames">
+            <el-collapse-item v-for="(item,index) in interactingViruses" :title="item.name" :name="item.name+index">
+             <div class="item_card">
+              <div class="left">
+                <div class="row_1">Virus Details</div>
+                <div class="row_2">
+                  <div class="label">Virus type: </div>
+                  <div class="value">{{item.nucleic2}}</div>
+                </div>
+                <div class="row_2">
+                  <div class="label">Taxonomy ID: </div>
+                  <div class="value">{{item.taxonomyID}}</div>
+                </div>
+                <div class="row_2">
+                  <div class="label">Family: </div>
+                  <div class="value">{{item.family}}</div>
+                </div>
+                <div class="row_2">
+                  <div class="label">Subfamily: </div>
+                  <div class="value">{{item.subfamily}}</div>
+                </div>
+                <div class="row_2">
+                  <div class="label">Genus: </div>
+                  <div class="value">{{item.genus}}</div>
+                </div>
+              </div>
+              <div class="right">
+                <div class="row_1">Interacting Viral Proteins (1)</div>
+                <div class="row_1">{{item.interactionDetails&&item.interactionDetails[0].protein_name}}</div>
+                <div class="row_2">
+                  <div class="label">NCBI: </div>
+                  <div class="value">{{item.interactionDetails&&item.interactionDetails[0].protein_ncbi}}</div>
+                </div>
+                <div class="row_2">
+                  <div class="label">finalLR: </div>
+                  <div class="value">{{item.interactionDetails[0].finalLR }}</div>
+                </div>
+              </div>
+             </div>
+            </el-collapse-item>
+        </div>
+      </div>
+      <div class="detail_row7">
+        <div class="dr7_name">Disease Novelty</div>
+        <div class="chart_box">
+          <div class="chart_left" id="achart5"></div>
+          <div class="chart_right" id="achart6"></div>
+        </div>
+      </div>
+      <div class="detail_row8">
+        <div class="dr8_name">Gene Ontology Term</div>
+        <div class="info_box">
+          <div class="left">
+            <div class="opt_row">
+              <div class="btn">Function</div>
+              <div class="btn">Components</div>
+              <div class="btn">Processses</div>
+            </div>
+            <el-table style="width: 100%;margin-top: 0.2rem;" :max-height="300" :data="goComponent" tooltip-effect="dark">
+              <el-table-column prop="term" label="GO Term" width="300">
+              </el-table-column>
+              <el-table-column prop="explanation" label="Evidence" width="380">
+                <template slot-scope="scope">{{ scope.row.explanation}}({{scope.row.evidence}})</template>
+              </el-table-column>
+              <el-table-column prop="assigned_by" label="Assigned by">
+              </el-table-column>
+            </el-table>
+            <div class="opt_row" style="height: 0.35rem;">
+              <el-radio v-model="radio" label="1">Beta Count</el-radio>
+              <el-radio v-model="radio" label="2">Viral Interactions</el-radio>
+            </div>
+            <el-table style="width: 100%;margin-top: 0.2rem;" :max-height="300" :data="associations" tooltip-effect="dark">
+              <el-table-column label="GWAS Trait" width="180">
+                <template slot-scope="scope">{{ scope.row.trait}}</template>
+              </el-table-column>
+              <el-table-column prop="efoID" label="EFO ID" width="150">
+              </el-table-column>
+              <el-table-column prop="studyCountForAssoc" label="Study County" width="120">
+              </el-table-column>
+              <el-table-column prop="snpCount" label="SNP Count" width="100">
+              </el-table-column>
+              <el-table-column prop="betaCount" label="Beta Count" width="100">
+              </el-table-column>
+              <el-table-column prop="betaCount" label="Odds Ratio" width="100">
+              </el-table-column>
+              <el-table-column prop="meanRankScore" label="Evidence (Mean Rank Score)" width="100">
+                <template slot-scope="scope">{{scope.row.meanRankScore?Number(scope.row.meanRankScore).toFixed(2):''}}</template>
+              </el-table-column>
+              <el-table-column prop="meanRankScore" label="Provenance" width="80">
+                <template slot-scope="scope">
+                  <img src="./images/share_icon.png" style="height: 0.3rem;width: 0.3rem;cursor: pointer;" alt="">
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="last_chart" id="last_chart"></div>
+          </div>
+          <div class="right">
+            <div class="opt_row">
+              <div class="btn">UniProt Keyword</div>
+            </div>
+            <div class="list">
+              <div class="item" v-for="(item,index) in uniprotKeyword" :key="item.name+index">
+                <div class="label">{{item.name}}</div>
+                <img class="icon" src="./images/share_icon.png" alt="">
+              </div>
+            </div>
+            <div class="opt_row">
+              <div class="btn">GWAS Trait</div>
+            </div>
+            <div class="list">
+              <div class="item" v-for="item in gwasTrait" :key="item">
+                <div class="label">{{item}}</div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/base.js"></script>
+  <script src="./js/detail.js"></script>
+  <script type="module" src="./dist/protvista-uniprot.mjs"></script>
+</body>
+
+</html>
